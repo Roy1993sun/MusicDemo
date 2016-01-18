@@ -1,5 +1,7 @@
 package com.roy.musical.ui;
 
+import com.roy.musical.R;
+
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,20 +10,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
-
-import com.roy.musical.R;
 
 /**
  * Created by roy on 16-1-15.
  */
-public class ActionBarCastAty extends AppCompatActivity {
+public abstract class ActionBarCastAty extends AppCompatActivity {
     private DrawerLayout          mDrawerLayout;
     private Toolbar               mtToolbar;
     private ActionBarDrawerToggle mToggle;
 
-    int mItemToOpenWhenDrawerClosed = -1;
+    int mItemWhenOpenWhenDrawerClosed = -1;
 
     DrawerLayout.DrawerListener mDrawerListener = new DrawerLayout.DrawerListener() {
         @Override
@@ -48,15 +49,12 @@ public class ActionBarCastAty extends AppCompatActivity {
                 mToggle.onDrawerClosed(drawerView);
             }
 
-            if (mItemToOpenWhenDrawerClosed >= 0) {
-                Bundle extras = ActivityOptions.makeCustomAnimation(
-                        ActionBarCastAty.this,
-                        R.anim.fade_in,
-                        R.anim.fade_out)
+            if (mItemWhenOpenWhenDrawerClosed >= 0) {
+                Bundle extras = ActivityOptions.makeCustomAnimation(ActionBarCastAty.this, R.anim.fade_in, R.anim.fade_out)
                                                .toBundle();
 
                 Class atyClass = null;
-                switch (mItemToOpenWhenDrawerClosed) {
+                switch (mItemWhenOpenWhenDrawerClosed) {
                     case R.id.nav_all_music:
                         Toast.makeText(ActionBarCastAty.this, "点击了all music", Toast.LENGTH_SHORT)
                              .show();
@@ -108,12 +106,50 @@ public class ActionBarCastAty extends AppCompatActivity {
         mtToolbar.inflateMenu(R.menu.main);
 
         if (mDrawerLayout != null) {
-            NavigationView mNavigationView = (NavigationView) findViewById(R.id.nav_view);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
 
-            mToggle = new ActionBarDrawerToggle(this,mDrawerLayout,mtToolbar,R.string.open_content_drawer,R.string.close_content_drawer);
+            mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mtToolbar, R.string.open_content_drawer, R.string.close_content_drawer);
             mDrawerLayout.setDrawerListener(mDrawerListener);
+            populateDrawerItems(navigationView);
+            setSupportActionBar(mtToolbar);
+            updateDrawerToggle();
+        }
 
+    }
+
+    private void populateDrawerItems(NavigationView navigationView) {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                mItemWhenOpenWhenDrawerClosed = item.getItemId();
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+
+        if (MusicPlayerActivity.class.isAssignableFrom(getClass())) {
+            navigationView.setCheckedItem(R.id.nav_all_music);
+        } else if (PlayListActivity.class.isAssignableFrom(getClass())) {
+            navigationView.setCheckedItem(R.id.nav_playlist);
+        }
+    }
+
+    private void updateDrawerToggle() {
+        if (mtToolbar == null) {
+            return;
+        }
+        boolean isRoot = getFragmentManager().getBackStackEntryCount() == 0;
+        mToggle.setDrawerIndicatorEnabled(isRoot);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(!isRoot);
+            getSupportActionBar().setDisplayShowHomeEnabled(!isRoot);
+            getSupportActionBar().setHomeButtonEnabled(!isRoot);
+        }
+        if (isRoot) {
+            mToggle.syncState();
         }
 
     }
