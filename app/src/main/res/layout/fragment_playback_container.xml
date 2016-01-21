@@ -20,52 +20,53 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_toStartOf="@+id/pause"
+        android:layout_toStartOf="@+id/play_pause"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/album_art">
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/fm_tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"
             android:textColor="?android:attr/textColorPrimary"
-            tools:text="Music name needs sooooo long"
+            tools:text="Music name needs tooooo long"
             />
 
         <TextView
-            android:id="@+id/artist"
+            android:id="@+id/fm_tv_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp"
             android:textColor="?android:attr/textColorPrimary"
             tools:text="singer and band"
             />
 
-        <TextView
-            android:id="@+id/extra_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorPrimary"
-            android:visibility="gone"
-            tools:text="what is cast?"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/extra_info"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:ellipsize="end"-->
+            <!--android:maxLines="1"-->
+            <!--android:textAppearance="?android:attr/textAppearanceMedium"-->
+            <!--android:textColor="?android:attr/textColorPrimary"-->
+            <!--android:visibility="gone"-->
+            <!--tools:text="what is cast?"-->
+            <!--/>-->
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/pause"
+    <ImageButton
+        android:id="@+id/play_pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:padding="8dp"
+        android:background="?android:selectableItemBackgroundBorderless"
         android:src="@mipmap/ic_play_arrow_black_36dp"
         android:tint="#00b8d4"
         android:tintMode="src_in"
